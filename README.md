@@ -1,13 +1,12 @@
 # devilutionX-ZZMod
 
-This is a mod of devilutionX. This mod directly modifies devilutionX's code, so you don't need the original devilutionX to run the mod (follow [build guide](./docs/building.md) or the files in `.github/workflows`). Just compile this mod or download the binary files. But you still need the files from the Diablo, just like devilutionX.
+This is a mod of devilutionX. This mod directly modifies devilutionX's code, so you don't need the original devilutionX to run the mod. Just compile this mod (follow [build guide](./docs/building.md) or the files in `.github/workflows`) or download the binary files ([download links](https://github.com/ZhiZe-ZG/devilutionX-ZZMod/releases/)). But you still need the files from the Diablo, just like devilutionX.
 
-Main feature:
+Main features:
 
 * Black Deaths (the yellow zombies) hit will reduce vitality instead of max hp.
 
 ---
-
 
 <p align="center">
 <img width="554" src="https://user-images.githubusercontent.com/204594/113575181-c946a400-961d-11eb-8347-a8829fa3830c.png">
