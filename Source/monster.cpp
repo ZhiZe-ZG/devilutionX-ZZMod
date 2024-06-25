@@ -1147,18 +1147,23 @@ void MonsterAttackPlayer(Monster &monster, Player &player, int hit, int minDam, 
 		return;
 	}
 	if (monster.type().type == MT_YZOMBIE && &player == MyPlayer) {
-		if (player._pMaxHP > 64) {
-			if (player._pMaxHPBase > 64) {
-				player._pMaxHP -= 64;
-				if (player._pHitPoints > player._pMaxHP) {
-					player._pHitPoints = player._pMaxHP;
-				}
-				player._pMaxHPBase -= 64;
-				if (player._pHPBase > player._pMaxHPBase) {
-					player._pHPBase = player._pMaxHPBase;
-				}
-			}
-		}
+		// Reduce vitality instead of MaxHP
+		// Original code:
+		// if (player._pMaxHP > 64) {
+		// 	if (player._pMaxHPBase > 64) {
+		// 		player._pMaxHP -= 64;
+		// 		if (player._pHitPoints > player._pMaxHP) {
+		// 			player._pHitPoints = player._pMaxHP;
+		// 		}
+		// 		player._pMaxHPBase -= 64;
+		// 		if (player._pHPBase > player._pMaxHPBase) {
+		// 			player._pHPBase = player._pMaxHPBase;
+		// 		}
+		// 	}
+		// }
+		//Changes (thansk to https://github.com/diasurgical/devilutionX/pull/1645/files)
+		if (player.GetBaseAttributeValue(CharacterAttribute::Vitality) > 1)
+			ModifyPlrVit(player, -1);
 	}
 	int dam = (minDam << 6) + GenerateRnd(((maxDam - minDam) << 6) + 1);
 	dam = std::max(dam + (player._pIGetHit << 6), 64);
