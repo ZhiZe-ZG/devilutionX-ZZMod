@@ -5,6 +5,7 @@ This is a mod of devilutionX. This mod directly modifies devilutionX's code, so 
 Main features:
 
 * Black Deaths (the yellow zombies) hit will reduce vitality instead of max hp.
+* Fascinating Shrine, Ornate Shine and Sacred Shrine reduce magic instead of max mana.
 
 ---
 
