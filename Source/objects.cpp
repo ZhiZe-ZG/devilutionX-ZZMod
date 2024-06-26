@@ -2533,9 +2533,16 @@ void OperateShrineCostOfWisdom(Player &player, SpellID spellId, diablo_message m
 	// 	player._pMaxManaBase = 0;
 	// }
 	//Changes (thansk to https://github.com/diasurgical/devilutionX/pull/1645/files)
-	int magicLoss = player.GetBaseAttributeValue(CharacterAttribute::Magic) / 10;
-	if (magicLoss > 0)
-		ModifyPlrMag(player, -magicLoss);
+	int magic = player.GetBaseAttributeValue(CharacterAttribute::Magic);
+	int magicLoss = magic / 10;
+	if (magicLoss > 0){
+		int remainingMagic = magic-magicLoss;
+		if (remainingMagic > 1)
+			ModifyPlrMag(player, -magicLoss);
+		else
+			if (magic > 1)
+				ModifyPlrMag(player, -(magic-1));
+	}
 
 	RedrawEverything();
 
