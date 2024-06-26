@@ -2515,21 +2515,27 @@ void OperateShrineCostOfWisdom(Player &player, SpellID spellId, diablo_message m
 		}
 	}
 
-	uint32_t t = player._pMaxManaBase / 10;
-	int v1 = player._pMana - player._pManaBase;
-	int v2 = player._pMaxMana - player._pMaxManaBase;
-	player._pManaBase -= t;
-	player._pMana -= t;
-	player._pMaxMana -= t;
-	player._pMaxManaBase -= t;
-	if (player._pMana >> 6 <= 0) {
-		player._pMana = v1;
-		player._pManaBase = 0;
-	}
-	if (player._pMaxMana >> 6 <= 0) {
-		player._pMaxMana = v2;
-		player._pMaxManaBase = 0;
-	}
+	// Reduce player Magic instead of Base Mana
+	// Original code:
+	// uint32_t t = player._pMaxManaBase / 10;
+	// int v1 = player._pMana - player._pManaBase;
+	// int v2 = player._pMaxMana - player._pMaxManaBase;
+	// player._pManaBase -= t;
+	// player._pMana -= t;
+	// player._pMaxMana -= t;
+	// player._pMaxManaBase -= t;
+	// if (player._pMana >> 6 <= 0) {
+	// 	player._pMana = v1;
+	// 	player._pManaBase = 0;
+	// }
+	// if (player._pMaxMana >> 6 <= 0) {
+	// 	player._pMaxMana = v2;
+	// 	player._pMaxManaBase = 0;
+	// }
+	//Changes (thansk to https://github.com/diasurgical/devilutionX/pull/1645/files)
+	int magicLoss = player.GetBaseAttributeValue(CharacterAttribute::Magic) / 10;
+	if (magicLoss > 0)
+		ModifyPlrMag(player, -magicLoss);
 
 	RedrawEverything();
 
