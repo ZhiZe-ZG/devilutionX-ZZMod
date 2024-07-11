@@ -175,7 +175,6 @@ set(libdevilutionx_SRCS
 
   utils/cel_to_clx.cpp
   utils/cl2_to_clx.cpp
-  utils/console.cpp
   utils/display.cpp
   utils/language.cpp
   utils/logged_fstream.cpp
@@ -219,10 +218,6 @@ endif()
 
 if(IOS)
   list(APPEND libdevilutionx_SRCS platform/ios/ios_paths.m)
-endif()
-
-if(USE_SDL1)
-  list(APPEND libdevilutionx_SRCS utils/sdl2_to_1_2_backports.cpp)
 endif()
 
 if(NOT DISABLE_DEMOMODE)
@@ -275,6 +270,17 @@ if(SCREEN_READER_INTEGRATION)
   )
 endif()
 
+if(DEVILUTIONX_SCREENSHOT_FORMAT STREQUAL DEVILUTIONX_SCREENSHOT_FORMAT_PCX)
+  list(APPEND libdevilutionx_SRCS
+    utils/surface_to_pcx.cpp
+  )
+endif()
+if(DEVILUTIONX_SCREENSHOT_FORMAT STREQUAL DEVILUTIONX_SCREENSHOT_FORMAT_PNG)
+  list(APPEND libdevilutionx_SRCS
+    utils/surface_to_png.cpp
+  )
+endif()
+
 add_devilutionx_library(libdevilutionx OBJECT ${libdevilutionx_SRCS})
 target_include_directories(libdevilutionx PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 
@@ -309,6 +315,23 @@ target_link_libraries(libdevilutionx PUBLIC ${LUA_LIBRARIES} sol2::sol2)
 
 if(SCREEN_READER_INTEGRATION AND WIN32)
   target_compile_definitions(libdevilutionx PRIVATE Tolk)
+endif()
+
+add_devilutionx_object_library(libdevilutionx_utils_console
+  utils/console.cpp
+)
+
+if(USE_SDL1)
+  add_devilutionx_library(libdevilutionx_sdl2_to_1_2_backports STATIC
+    utils/sdl2_to_1_2_backports.cpp
+  )
+  target_link_libraries(libdevilutionx_sdl2_to_1_2_backports PRIVATE
+    libdevilutionx_utils_console
+    fmt::fmt
+  )
+  target_link_libraries(DevilutionX::SDL INTERFACE
+    libdevilutionx_sdl2_to_1_2_backports
+  )
 endif()
 
 add_devilutionx_object_library(libdevilutionx_codec
@@ -379,6 +402,7 @@ target_link_libraries(libdevilutionx PUBLIC
   libdevilutionx_parse_int
   libdevilutionx_strings
   libdevilutionx_utf8
+  libdevilutionx_utils_console
   ${libdevilutionx_DEPS}
 )
 
