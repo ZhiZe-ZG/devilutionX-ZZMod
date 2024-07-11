@@ -2536,6 +2536,11 @@ void OperateShrineCostOfWisdom(Player &player, SpellID spellId, diablo_message m
 	int magic = player.GetBaseAttributeValue(CharacterAttribute::Magic);
 	int magicLoss = magic / 10;
 	if (magicLoss > 0){
+		// limit magic loss less than 10 (include 10)
+		if (magicLoss > 10){
+			magicLoss = 10;
+		}
+		// check remain magic, but this is not necessary if magicLoss is calculated by magic/10
 		int remainingMagic = magic-magicLoss;
 		if (remainingMagic > 1)
 			ModifyPlrMag(player, -magicLoss);
