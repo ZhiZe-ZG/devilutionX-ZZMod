@@ -6,7 +6,6 @@
 #include "items.h"
 
 #include <algorithm>
-#include <bitset>
 #ifdef _DEBUG
 #include <random>
 #endif
@@ -1442,8 +1441,6 @@ _item_indexes RndTypeItems(ItemType itemType, int imid, int lvl)
 
 _unique_items CheckUnique(Item &item, int lvl, int uper, int uidOffset = 0)
 {
-	std::bitset<128> uok = {};
-
 	if (GenerateRnd(100) > uper)
 		return UITEM_INVALID;
 
@@ -1462,11 +1459,11 @@ _unique_items CheckUnique(Item &item, int lvl, int uper, int uidOffset = 0)
 	DiscardRandomValues(1);
 
 	// Check if uidOffset is out of bounds
-	if (uidOffset >= validUniques.size()) {
+	if (static_cast<size_t>(uidOffset) >= validUniques.size()) {
 		return UITEM_INVALID;
 	}
 
-	uint8_t selectedUniqueIndex = validUniques[validUniques.size() - 1 - uidOffset];
+	const uint8_t selectedUniqueIndex = validUniques[validUniques.size() - 1 - uidOffset];
 
 	return static_cast<_unique_items>(selectedUniqueIndex);
 }
@@ -1847,25 +1844,12 @@ void printItemMiscGenericGamepad(const Item &item, const bool isOil, bool isCast
 
 void printItemMiscGamepad(const Item &item, bool isOil, bool isCastOnTarget)
 {
-	std::string_view activateButton;
-	std::string_view castButton;
-	switch (GamepadType) {
-	case GamepadLayout::Generic:
+	if (GamepadType == GamepadLayout::Generic) {
 		printItemMiscGenericGamepad(item, isOil, isCastOnTarget);
 		return;
-	case GamepadLayout::Xbox:
-		activateButton = controller_button_icon::Xbox_Y;
-		castButton = controller_button_icon::Xbox_X;
-		break;
-	case GamepadLayout::PlayStation:
-		activateButton = controller_button_icon::Playstation_Triangle;
-		castButton = controller_button_icon::Playstation_Square;
-		break;
-	case GamepadLayout::Nintendo:
-		activateButton = controller_button_icon::Nintendo_X;
-		castButton = controller_button_icon::Nintendo_Y;
-		break;
 	}
+	const std::string_view activateButton = ToString(ControllerButton_BUTTON_Y);
+	const std::string_view castButton = ToString(ControllerButton_BUTTON_X);
 
 	if (item._iMiscId == IMISC_MAPOFDOOM) {
 		AddPanelString(fmt::format(fmt::runtime(_("{} to view")), activateButton));
@@ -3363,7 +3347,7 @@ void TryRandomUniqueItem(Item &item, _item_indexes idx, int8_t mLevel, int uper,
 	}
 
 	// Amount to decrease the final uid by in CheckUnique() to get the desired unique.
-	const int uidOffset = static_cast<int>(std::count_if(UniqueItems.begin() + uid + 1, UniqueItems.end(), [&uniqueItem](UniqueItem &potentialMatch) {
+	const auto uidOffset = static_cast<int>(std::count_if(UniqueItems.begin() + uid + 1, UniqueItems.end(), [&uniqueItem](UniqueItem &potentialMatch) {
 		return uniqueItem.UIItemId == potentialMatch.UIItemId && uniqueItem.UIMinLvl == potentialMatch.UIMinLvl;
 	}));
 
