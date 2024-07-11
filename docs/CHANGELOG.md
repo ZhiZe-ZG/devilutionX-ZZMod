@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Features
+
+* Fascinating Shrine, Ornate Shine and Sacred Shrine (shrines that cost wisdom) reduce magic instead of max mana.
+
+### devilutionX
+
+* Merge new codes.
+
+## ZZMod 0.0.1
+
+### Features
+
+* Black Deaths (the yellow zombies) hit will reduce vitality instead of max hp.
+
+### devilutionX
+
+* Based on devilutionX 1.5.2.
+
 ## DevilutionX 1.5.2
 
 ### Bug Fixes
